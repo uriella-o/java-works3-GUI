@@ -49,67 +49,72 @@ public class Snakegame extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        try {
-            newFood();
+        newFood();
+
+        VBox root = new VBox();
+        root.setFillWidth(true);
+        root.setMaxWidth(Double.MAX_VALUE);
+        root.setMaxHeight(Double.MAX_VALUE);
 
 
-            VBox root = new VBox();
-            Canvas c = new Canvas(width * cornersize, height * cornersize);
-            GraphicsContext gc = c.getGraphicsContext2D();
-            root.getChildren().add(c);
+        Canvas c = new Canvas(800, 800);
+        c.maxWidth(Double.MAX_VALUE);
+        c.maxHeight(Double.MAX_VALUE);
+        GraphicsContext gc = c.getGraphicsContext2D();
+        root.getChildren().add(c);
 
-            new AnimationTimer() {
-                long lastTick = 0;
+        startTickerAnimation(gc);
 
-                public void handle(long now) {
-                    if (lastTick == 0) {
-                        lastTick = now;
-                        tick(gc);
-                        return;
-                    }
+        Scene scene = new Scene(root, 800,800);
 
-                    if (now - lastTick > 1000000000 / speed) {
-                        lastTick = now;
-                        tick(gc);
-                    }
+        //control
+        addGameInputListener(scene);
+
+        //add start snake parts
+        snake.add(new Corner(width/2,height/2));
+        snake.add(new Corner(width/2,height/2));
+        snake.add(new Corner(width/2,height/2));
+
+        stage.setScene(scene);
+        stage.setTitle("🐍GREEN ANACONDA🐉");
+        stage.show();
+    }
+
+    private void startTickerAnimation(GraphicsContext gc){
+        new AnimationTimer() {
+            long lastTick = 0;
+
+            public void handle(long now) {
+                if (lastTick == 0) {
+                    lastTick = now;
+                    tick(gc);
+                    return;
                 }
-            }.start();
 
-
-            Scene scene = new Scene(root, width*cornersize,height*cornersize);
-
-            //control
-            scene.addEventFilter(KeyEvent.KEY_PRESSED, key ->{
-                if (key.getCode()== KeyCode.W){
-                    direction = Dir.up;
+                if (now - lastTick > 1000000000 / speed) {
+                    lastTick = now;
+                    tick(gc);
                 }
-                if (key.getCode()== KeyCode.A){
-                    direction = Dir.left;
-                }
-                if (key.getCode()== KeyCode.S){
-                    direction = Dir.down;
-                }
-                if (key.getCode()== KeyCode.D){
-                    direction = Dir.right;
-                }
+            }
+        }.start();
+    }
+    private void addGameInputListener(Scene scene){
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key ->{
+            if (key.getCode()== KeyCode.UP){
+                direction = Dir.up;
+            }
+            if (key.getCode()== KeyCode.LEFT){
+                direction = Dir.left;
+            }
+            if (key.getCode()== KeyCode.DOWN){
+                direction = Dir.down;
+            }
+            if (key.getCode()== KeyCode.RIGHT){
+                direction = Dir.right;
+            }
 
         });
 
-            //add start snake parts
-            snake.add(new Corner(width/2,height/2));
-            snake.add(new Corner(width/2,height/2));
-            snake.add(new Corner(width/2,height/2));
-
-
-
-
-            stage.setScene(scene);
-            stage.setTitle("🐍GREEN ANACONDA🐉");
-//            stage.getIcons().add();
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //tick
@@ -168,7 +173,7 @@ public class Snakegame extends Application {
         //fill
         //background
         gc.setFill(Color.BLACK);
-        gc.fillRect(0,0,width*cornersize,height*cornersize);
+        gc.fillRect(0,0,Double.MAX_VALUE,Double.MAX_VALUE);
 
         //score
         gc.setFill(Color.WHITE);
@@ -206,11 +211,6 @@ public class Snakegame extends Application {
 
     }
 
-
-
-
-
-
     //food
     public static void newFood(){
        start: while (true){
@@ -229,7 +229,5 @@ public class Snakegame extends Application {
        }
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+
 }

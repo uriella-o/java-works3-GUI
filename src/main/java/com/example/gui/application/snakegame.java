@@ -205,6 +205,7 @@ public class snakegame extends Application {
     }
 
     // food
+    // This is called inorder to randomly place the food and change it's color.
     public static void newFood() {
         start: while (true) {
             foodX = rand.nextInt(width);
