@@ -78,21 +78,21 @@ public class GameData {
 
     private static Obstacle[] obstacles3 = new Obstacle[]{
             ///Top middle
-            new Obstacle(new Point(5,1), Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(6,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(7,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(8,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(9,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(10,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(11,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(12,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(13,1),Color.BROWN,Color.BROWN),
-            new Obstacle(new Point(14,1),Color.BROWN,Color.DARKORANGE),
+            new Obstacle(new Point(5,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(6,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(7,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(8,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(9,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(10,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(11,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(12,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(13,1),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(14,1),Color.BROWN.darker(),Color.DARKORANGE),
 
             /// middle left
-            new Obstacle(new Point(9,2)),
-            new Obstacle(new Point(9,3)),
-            new Obstacle(new Point(9,4)),
+            new Obstacle(new Point(9,2),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(9,3),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(9,4),Color.BROWN.darker(),Color.DARKORANGE),
             new Obstacle(new Point(9,5), true),
             new Obstacle(new Point(9,6),true),
             new Obstacle(new Point(9,7),true),
@@ -102,14 +102,14 @@ public class GameData {
             new Obstacle(new Point(9,12),true),
             new Obstacle(new Point(9,13),true),
             new Obstacle(new Point(9,14),true),
-            new Obstacle(new Point(9,15)),
-            new Obstacle(new Point(9,16)),
-            new Obstacle(new Point(9,17)),
+            new Obstacle(new Point(9,15),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(9,16),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(9,17),Color.BROWN.darker(),Color.DARKORANGE),
 
             ///middle right
-            new Obstacle(new Point(10,2)),
-            new Obstacle(new Point(10,3)),
-            new Obstacle(new Point(10,4)),
+            new Obstacle(new Point(10,2),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(10,3),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(10,4),Color.BROWN.darker(),Color.DARKORANGE),
             new Obstacle(new Point(10,5),true),
             new Obstacle(new Point(10,6),true),
             new Obstacle(new Point(10,7),true),
@@ -119,21 +119,21 @@ public class GameData {
             new Obstacle(new Point(10,12),true),
             new Obstacle(new Point(10,13),true),
             new Obstacle(new Point(10,14),true),
-            new Obstacle(new Point(10,15)),
-            new Obstacle(new Point(10,16)),
-            new Obstacle(new Point(10,17)),
+            new Obstacle(new Point(10,15),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(10,16),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(10,17),Color.BROWN.darker(),Color.DARKORANGE),
 
             /// bottom middle
-            new Obstacle(new Point(5,18)),
-            new Obstacle(new Point(6,18)),
-            new Obstacle(new Point(7,18)),
-            new Obstacle(new Point(8,18)),
-            new Obstacle(new Point(9,18)),
-            new Obstacle(new Point(10,18)),
-            new Obstacle(new Point(11,18)),
-            new Obstacle(new Point(12,18)),
-            new Obstacle(new Point(13,18)),
-            new Obstacle(new Point(14,18)),
+            new Obstacle(new Point(5,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(6,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(7,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(8,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(9,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(10,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(11,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(12,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(13,18),Color.BROWN.darker(),Color.DARKORANGE),
+            new Obstacle(new Point(14,18),Color.BROWN.darker(),Color.DARKORANGE),
 
     };
 
@@ -145,10 +145,9 @@ public class GameData {
 
 
     public static Level[] levels = new Level[]{
-            new Level("Level 1", Difficulty.Easy, sceneData1, 100),
-            new Level("Level 2", Difficulty.Medium, sceneData2, 80),
-            new Level("Level 3", Difficulty.Hard, sceneData3, 80, Color.web("373A40"), Color.web("686D76")),
-
+            new Level("Level 1", Difficulty.Easy, sceneData1, 50),
+            new Level("Level 2", Difficulty.Medium, sceneData2, 40),
+            new Level("Level 3", Difficulty.Hard, sceneData3, 40, Color.web("373A40"), Color.web("686D76")),
     };
 
 

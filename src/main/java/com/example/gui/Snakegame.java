@@ -12,6 +12,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -29,6 +30,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 
 public class Snakegame extends Application {
 
@@ -38,9 +42,14 @@ public class Snakegame extends Application {
     public static final int columns = 20;
     public static final int square_size = width/columns;
 
+    private Stage stage;
+
     private int score =0, highestScore;
 
     private Timeline game;
+
+    private MediaPlayer eatMp,obstacleMp,decoyMp,backgroundMp,gameOverMp,winMp;
+    private Media eatMedia,obstacleMedia,decoyMedia,gameOverMedia,backgroundMedia,winMedia;
 
     private static final String[] food_images = AssetsData.foodImages;
     private static final String[] decoy_images = AssetsData.decoyImages;
@@ -65,8 +74,46 @@ public class Snakegame extends Application {
     private int extraLives = 0;
 
 
+
+
     @Override
     public void start(Stage stage) throws Exception {
+        this.stage = stage;
+        String eatFile = getClass().getResource("audio/eat.mp3").toExternalForm();
+        String obstacleFile = getClass().getResource("audio/obstacle-hit.mp3").toExternalForm();
+        String decoyFile = getClass().getResource("audio/decoy-hit.mp3").toExternalForm();
+        String winFile = getClass().getResource("audio/win.mp3").toExternalForm();
+        String gameFile = getClass().getResource("audio/background-hit.mp3").toExternalForm();
+        String gameOverFile = getClass().getResource("audio/game-over.mp3").toExternalForm();
+
+
+
+
+        eatMedia = new Media(eatFile);
+        obstacleMedia = new Media(obstacleFile);
+        decoyMedia = new Media(decoyFile);
+        backgroundMedia = new Media(gameFile);
+        gameOverMedia = new Media(gameOverFile);
+        winMedia = new Media(winFile);
+
+        eatMp = new MediaPlayer(eatMedia);
+        obstacleMp = new MediaPlayer(obstacleMedia);
+        decoyMp = new MediaPlayer(decoyMedia);
+        backgroundMp = new MediaPlayer(backgroundMedia) ;
+        gameOverMp = new MediaPlayer(gameOverMedia);
+        winMp = new MediaPlayer(winMedia);
+
+        obstacleMp.setVolume(0.5);
+
+        backgroundMp.setVolume(1);
+
+        backgroundMp.setCycleCount(Animation.INDEFINITE);
+        backgroundMp.play();
+
+
+
+
+
         stage.setTitle("Anaconda");
 //        stage.getIcons().add(new Image())
         Group root = new Group();
@@ -97,6 +144,11 @@ public class Snakegame extends Application {
     }
 
     public void play(Stage stage, int level, int highestScore) throws Exception {
+        if(winMp.getStatus() == MediaPlayer.Status.PLAYING){
+            winMp.stop();
+        }
+        backgroundMp.stop();
+        gameOverMp.stop();
         levelIndex = level;
         this.highestScore = highestScore;
         start(stage);
@@ -110,25 +162,30 @@ public class Snakegame extends Application {
             if(score>= currentLevel.maxScore){
                 gc.setFill(Color.GOLD);
                 gc.setFont(new Font("Digital-8", 70));
-                gc.fillText("You Won :)",width/3.5, height/2);
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                levelIndex = levelIndex+1 <GameData.levels.length? ++levelIndex:0;
+                gc.fillText(levelIndex == GameData.levels.length-1?"You finished game :)":"You Won :)",width/3.5, height/2);
                 game.stop();
-                if(levelIndex==0){
-                    gc.fillText("You finished game :)",width/3.5, height/2);
-                }else{
-                    try {
-                        play(new Stage(),levelIndex, highestScore);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
+                winMp.play();
+
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        levelIndex = levelIndex+1 <GameData.levels.length? ++levelIndex:0;
+                        if(levelIndex==0){
+                            gc.fillText("You finished game :)",width/3.5, height/2);
+                        }else{
+                            Platform.runLater(() -> {
+                                try {
+                                    stage.close();
+                                    play(new Stage(),levelIndex, highestScore);
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                            });
+                        }
+
                     }
-                }
+                },5000);
                 return;
             }
             gc.setFill(Color.RED);
@@ -490,8 +547,21 @@ public class Snakegame extends Application {
         //Then it will be game over whether the snake touches the border, obstacle, decoy or eats itself.
         gameOver = touchesBorder || killsItself || touchesObstacle || touchesDecoy;
 
-        if(touchesBorder || touchesObstacle){
-//            MediaPlayer mp =
+        if(touchesBorder || touchesObstacle||touchesDecoy){
+            backgroundMp.stop();
+
+            if(touchesBorder || touchesObstacle){
+                loud(obstacleMp);
+            }
+            else{
+                loud(decoyMp);
+            }
+            loud(gameOverMp);
+        }
+        if(killsItself){
+            backgroundMp.stop();
+            loud(gameOverMp);
+
         }
 
 
@@ -580,6 +650,8 @@ public class Snakegame extends Application {
         shield=false;
     }
     private void eatFood(){
+        
+
         final int maxScore = currentLevel.maxScore;
         if(snakeHead.x == foodPoint.x && snakeHead.y == foodPoint.y){
             snakeBody.add(new Point(-1,-1));
@@ -592,6 +664,18 @@ public class Snakegame extends Application {
             generateFood();
             generateDecoy();
             generatePowerUp();
+
+
+            // Create a Media object
+
+
+            // Create a MediaPlayer object
+            // Play the sound
+            if(eatMp.getStatus() == MediaPlayer.Status.PLAYING){
+                eatMp.stop();
+            }
+            eatMp.play();
+
 
             score+=5;
             highestScore= Math.max(score, highestScore);
@@ -614,6 +698,7 @@ public class Snakegame extends Application {
     }
 
     private void respawn(){
+        disableShield();
         final List<Point> snake = new ArrayList<>();
         snakeHead = new Point(5,  rows /2);
         snake.add(snakeHead);
@@ -624,6 +709,14 @@ public class Snakegame extends Application {
         snakeBody = snake;
 
 
+
+    }
+
+    private void loud(final MediaPlayer mp){
+        if(mp.getStatus() == MediaPlayer.Status.PLAYING){
+            mp.stop();
+        }
+        mp.play();
 
     }
 
